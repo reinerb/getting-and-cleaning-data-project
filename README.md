@@ -39,3 +39,17 @@ per row, while dcast() takes the melted data and creates a table of the mean
 value of each variable per subject and activity.
 
 A description of the variables is contained in the file codebook.txt.
+
+## Future Considerations
+
+The data is tidy enough per the requirements of the assignment: there is one
+variable per column, one observation per row, and the column headers are
+(mostly) human readable. There are some things to consider to make this data
+a little cleaner, however:
+
+* There are three variables per measurement, as they are split into x, y, and z
+components. Each observation might be easier to interpret as one (x, y, z)
+vector, instead of three separate columns.
+* The column titles are not messy, but they are not easy to read. However, as
+the purpose of this assignment is to use the language to rename the titles,
+I did not manually rename them, as I might on another data set.
