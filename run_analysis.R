@@ -1,4 +1,5 @@
 library(dplyr)
+library(reshape2)
 
 # The files for this script are located in the Data folder.
 
@@ -29,6 +30,13 @@ features <- read.table('Data/features.txt',
 features$MeanOrStD <- grepl(x = features$Label, 
 			    pattern = '(.*mean[(][)])|(.*std[(][)])')
 
+# To keep naming the columns simple, we'll simply strip the punctuation from
+# each name, and make it lowercase.
+features$Label <- gsub('[^A-Za-z0-9]', '', features$Label) %>%
+	tolower()
+
+# To make clean column names, we'll remove 
+
 # We also need the subject IDs.
 test_subjects <- read.table('Data/test/subject_test.txt',
 			    col.names = 'SubjectID')
@@ -56,7 +64,11 @@ training <- cbind(training_subjects,
 phonedata <- rbind(test, training) %>%
 	arrange(SubjectID, Activity)
 
-# We don't need anything other than the data above now, so we can clear out
-# the working memory.
+# We don't need anything other than combined set now, so we can clean up
+# the environment.
 rm(activity_labels, features, test, test_activities, test_data, test_subjects,
    training, training_activities, training_data, training_subjects)
+
+# We will use reshape2 to melt and recast the data.
+meanphonedata <- melt(phonedata, c('SubjectID', 'Activity')) %>%
+	dcast(SubjectID + Activity ~ variable, mean)
