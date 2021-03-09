@@ -32,8 +32,7 @@ features$MeanOrStD <- grepl(x = features$Label,
 
 # To keep naming the columns simple, we'll simply strip the punctuation from
 # each name, and make it lowercase.
-features$Label <- gsub('[^A-Za-z0-9]', '', features$Label) %>%
-	tolower()
+features$Label <- gsub('[^A-Za-z0-9]', '', features$Label) %>% tolower()
 
 # To make clean column names, we'll remove 
 
@@ -61,8 +60,7 @@ training <- cbind(training_subjects,
 		  training_data)
 
 # And finally, combine the data into one set.
-phonedata <- rbind(test, training) %>%
-	arrange(SubjectID, Activity)
+phone_data <- rbind(test, training) %>% arrange(SubjectID, Activity)
 
 # We don't need anything other than combined set now, so we can clean up
 # the environment.
@@ -70,5 +68,10 @@ rm(activity_labels, features, test, test_activities, test_data, test_subjects,
    training, training_activities, training_data, training_subjects)
 
 # We will use reshape2 to melt and recast the data.
-meanphonedata <- melt(phonedata, c('SubjectID', 'Activity')) %>%
+mean_phone_data <- melt(phone_data, c('SubjectID', 'Activity')) %>%
 	dcast(SubjectID + Activity ~ variable, mean)
+
+# Finally, we write both of these to csv.
+write.csv(phone_data, file = 'Clean Data/phone_data.csv', row.names = FALSE)
+write.csv(mean_phone_data, file = 'Clean Data/mean_phone_data.csv',
+	  row.names = FALSE)
