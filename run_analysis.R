@@ -34,8 +34,6 @@ features$MeanOrStD <- grepl(x = features$Label,
 # each name, and make it lowercase.
 features$Label <- gsub('[^A-Za-z0-9]', '', features$Label) %>% tolower()
 
-# To make clean column names, we'll remove 
-
 # We also need the subject IDs.
 test_subjects <- read.table('Data/test/subject_test.txt',
 			    col.names = 'SubjectID')
