@@ -1,0 +1,39 @@
+From the original README.txt:
+=============================
+
+The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (walking, walking upstairs, walking downstairs, sitting, standing, laying) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, we captured 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. 
+
+The sensor signals (accelerometer and gyroscope) were pre-processed by applying noise filters and then sampled in fixed-width sliding windows of 2.56 sec and 50% overlap (128 readings/window). The sensor acceleration signal, which has gravitational and body motion components, was separated using a Butterworth low-pass filter into body acceleration and gravity. The gravitational force is assumed to have only low frequency components, therefore a filter with 0.3 Hz cutoff frequency was used. From each window, a vector of features was obtained by calculating variables from the time and frequency domain. See 'features_info.txt' for more details. 
+
+Each row of the dataset includes the following information:
+===========================================================
+
+- A subject ID, an integer between 1 and 30
+- A character string identifying the activity performed in that row
+- 66 mean or standard deviation variables corresponding to measurements taken by the smartphone.
+--- Those starting with 't' correspond to time values
+--- Those starting with 'f' correspond to frequency variables
+--- The data in phone_data.csv contains one measurement per line.
+--- Each line in mean_phone_data.csv contains the average for a subject performing an activity.
+
+The dataset includes the following:
+===================================
+
+- The raw data from the experiment, contained in the Data folder.
+- README.md, which outlines the process used to tidy the data.
+- run_analysis.R, the script used to tidy the data.
+- The cleaned data sets from running this script, contained in the Clean Data folder.
+- This codebook, codebook.txt.
+
+The data was tidied using the following method:
+===============================================
+
+To clean up the data, we employ some base R functions and some functions from the dplyr package. 
+
+Activity labels are drawn from Data/activity_labels.txt. The files y_test.txt and y_train.txt contain vectors of integers between 1 and 6 that correspond to these labels. The first section of code generates this vector with human-readable names.
+
+We then read in the data from features.txt, which contains the names of the 561 measurements logged in each line of X_test.txt and X_train.txt. Using Regex, we identify which positions on each vector are mean() or std() values, and mark those to be selected later. We also strip all punctuation and make the names lowercase, for more readable column names.
+
+As we read in the data from X_test.txt and X_train.txt, we use the column labels created in the last step, and make sure to select only the rows identified  above. We create a new table from the vector of subject IDs, the vector of activities, and the data table we imported for each of X_test and X_train. Once we combine these two tables, we have a clean data set.
+
+To obtain the second data set, we simply use the melt() and dcast() functions from the reshape2 package. Melt() generates a tall data frame with one variable per row, while dcast() takes the melted data and creates a table of the mean value of each variable per subject and activity.
